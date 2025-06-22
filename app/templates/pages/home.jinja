@@ -10,9 +10,90 @@
 
 {% block title %}
 
-    Flask Demo
+    Flask Teams 
 
 {% endblock %}
+
+
+{% block content %}
+
+    <h1>teams</h1>
+
+
+    <article>
+
+        <ul>
+            {% for teams in teams %}
+
+                <li class="teams">
+
+   
+                    
+                    {{ teams.name }}
+                
+                    
+                    {% if teams.completed %} 
+                        <a href="/incomplete/{{ team.id }}">🗹</a>
+                    {% else %} 
+                        <a href ="/complete/{{ team.id }}">☐</a>
+                    {% endif %}
+                        <a href ="/delete/{{ team.id }}">Delete</a>
+            
+                   
+                 
+                </li>
+
+                 
+            {% else %}
+
+                <p>None!</p>
+
+            {% endfor %}
+        
+         
+        
+        
+        
+        </ul>
+
+    </article>
+
+
+    <article>
+
+        <h3>Tasks</h3>
+
+        <form action="/add" method="POST">
+
+            <input
+                type="text"
+                name="name"
+                placeholder="name of task"
+                required
+            >
+
+            <input
+                type="number"
+                name="priority"
+                min="0"
+                max="5"
+                placeholder="priority of task"
+                required
+            >
+
+            <button>Add the Tasks</button>
+
+
+        </form>
+
+        
+       
+
+    </article>
+
+{% endblock %}
+
+
 
 
 {% block content %}

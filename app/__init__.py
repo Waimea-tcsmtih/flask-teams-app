@@ -30,73 +30,28 @@ def index():
     return render_template("pages/home.jinja")
 
 
-#-----------------------------------------------------------
-# About page route
-#-----------------------------------------------------------
-@app.get("/about/")
-def about():
-    return render_template("pages/about.jinja")
-
 
 #-----------------------------------------------------------
-# Things page route - Show all the things, and new thing form
-#-----------------------------------------------------------
-@app.get("/things/")
-def show_all_things():
-    with connect_db() as client:
-        # Get all the things from the DB
-        sql = "SELECT id, name FROM things ORDER BY name ASC"
-        params = []
-        result = client.execute(sql, params)
-        things = result.rows
-
-        # And show them on the page
-        return render_template("pages/things.jinja", things=things)
-
-
-#-----------------------------------------------------------
-# Thing page route - Show details of a single thing
-#-----------------------------------------------------------
-@app.get("/thing/<int:id>")
-def show_one_thing(id):
-    with connect_db() as client:
-        # Get the thing details from the DB
-        sql = "SELECT id, name, price FROM things WHERE id=?"
-        params = [id]
-        result = client.execute(sql, params)
-
-        # Did we get a result?
-        if result.rows:
-            # yes, so show it on the page
-            thing = result.rows[0]
-            return render_template("pages/thing.jinja", thing=thing)
-
-        else:
-            # No, so show error
-            return not_found_error()
-
-
-#-----------------------------------------------------------
-# Route for adding a thing, using data posted from a form
+# Route for adding a team, using data posted from a form
 #-----------------------------------------------------------
 @app.post("/add")
 def add_a_thing():
     # Get the data from the form
-    name  = request.form.get("name")
-    price = request.form.get("price")
+    team  = request.form.get("team")
+    team_description = request.form.get("team description")
 
     # Sanitise the text inputs
     name = html.escape(name)
 
     with connect_db() as client:
-        # Add the thing to the DB
-        sql = "INSERT INTO things (name, price) VALUES (?, ?)"
-        params = [name, price]
+        # Add the team to the DB
+        sql = "INSERT INTO teams (team, team description) VALUES (?, ?)"
+        params = [team, team description]
         client.execute(sql, params)
 
         # Go back to the home page
-        flash(f"Thing '{name}' added", "success")
-        return redirect("/things")
+        flash(f"teams '{team}' added", "success")
+        return redirect("/")
 
 
 #-----------------------------------------------------------
